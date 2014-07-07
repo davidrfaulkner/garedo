@@ -25,6 +25,9 @@ class MainWindow ( QMainWindow ):
         self.ui.pushButton.clicked.connect(self.add_update)
         self.ui.pushButton_clear.clicked.connect(self.clear_delete)
         
+        #Connect Export Certificate
+        self.ui.pushButton_certificate.clicked.connect(self.export_certificate)
+        
         
         #Remove edit function from table until I go pro
         self.ui.tableWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
@@ -267,4 +270,9 @@ class MainWindow ( QMainWindow ):
         #Update Buttons to Delete / Update
         self.ui.pushButton.setText('Update')
         self.ui.pushButton_clear.setText('Delete')
+        
+    def export_certificate(self):
+        """Logic to ui select student type, generate csv of result, and copy/launch mailmerge template"""
+        type, ok = QInputDialog.getItem(self, "Export which entries", "Type:", ['Adult','Child'], 0, False)
+        
 
