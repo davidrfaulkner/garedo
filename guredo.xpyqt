@@ -1,0 +1,31 @@
+<!DOCTYPE XUPProject>
+<!--
+###########################################################################################
+##      Created using Monkey Studio IDE v1.9.0.4 (1.9.0.4)
+##
+##  Author    : David Faulkner<david.r.faulkner@gmail.com>
+##  Project   : guredo
+##  FileName  : guredo.xpythonqt
+##  Date      : 2014-07-01T21:46:45
+##  License   : GPL
+##  Comment   : Creating using Monkey Studio RAD
+##  Home Page : http://http://allyourcloud.wordpress.com/
+##
+##  This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+##  WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+##
+###########################################################################################
+-->
+<project version="1.1.0" name="guredo">
+    <variable name="XUP.MAIN_FILE">
+        <value>guredo.pyw</value>
+    </variable>
+    <variable name="FORMS">
+        <file>mainwindow.ui</file>
+    </variable>
+    <variable name="PYTHON_FILES">
+        <file>guredo.pyw</file>
+        <file>mainwindow.py</file>
+        <file>ClassStudents.py</file>
+    </variable>
+</project>
