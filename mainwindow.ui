@@ -62,7 +62,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Type</string>
+         <string>Session</string>
         </property>
        </widget>
       </item>
@@ -87,18 +87,12 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="inputGrade"/>
-      </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
          <string>Belt Size</string>
         </property>
        </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="inputBeltSize"/>
       </item>
       <item row="5" column="0">
        <widget class="QLabel" name="label_7">
@@ -150,12 +144,12 @@
       <item row="7" column="0">
        <widget class="QLabel" name="label_10">
         <property name="text">
-         <string>Fee Due:</string>
+         <string>Grading Fee:</string>
         </property>
        </widget>
       </item>
       <item row="7" column="1">
-       <widget class="QLabel" name="label_due">
+       <widget class="QLabel" name="label_gdue">
         <property name="text">
          <string>0.00</string>
         </property>
@@ -164,30 +158,7 @@
         </property>
        </widget>
       </item>
-      <item row="8" column="1">
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Add</string>
-        </property>
-        <property name="autoDefault">
-         <bool>true</bool>
-        </property>
-        <property name="default">
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="1">
-       <widget class="QPushButton" name="pushButton_clear">
-        <property name="text">
-         <string>Clear</string>
-        </property>
-        <property name="autoDefault">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="10" column="1">
+      <item row="12" column="1">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -200,14 +171,14 @@
         </property>
        </spacer>
       </item>
-      <item row="11" column="0">
+      <item row="13" column="0">
        <widget class="QLabel" name="label_12">
         <property name="text">
          <string>Total Children:</string>
         </property>
        </widget>
       </item>
-      <item row="11" column="1">
+      <item row="13" column="1">
        <widget class="QLabel" name="label_kids">
         <property name="text">
          <string>0</string>
@@ -217,14 +188,14 @@
         </property>
        </widget>
       </item>
-      <item row="12" column="0">
+      <item row="14" column="0">
        <widget class="QLabel" name="label_13">
         <property name="text">
          <string>Total Adults:</string>
         </property>
        </widget>
       </item>
-      <item row="12" column="1">
+      <item row="14" column="1">
        <widget class="QLabel" name="label_adults">
         <property name="text">
          <string>0</string>
@@ -234,14 +205,14 @@
         </property>
        </widget>
       </item>
-      <item row="13" column="0">
+      <item row="15" column="0">
        <widget class="QLabel" name="label_11">
         <property name="text">
          <string>Total Students:</string>
         </property>
        </widget>
       </item>
-      <item row="13" column="1">
+      <item row="15" column="1">
        <widget class="QLabel" name="label_total">
         <property name="text">
          <string>0</string>
@@ -251,28 +222,28 @@
         </property>
        </widget>
       </item>
-      <item row="14" column="0">
+      <item row="16" column="0">
        <widget class="QLabel" name="label_14">
         <property name="text">
          <string>Grading Fees</string>
         </property>
        </widget>
       </item>
-      <item row="15" column="0">
+      <item row="17" column="0">
        <widget class="QLabel" name="label_9">
         <property name="text">
          <string>Belt Fees</string>
         </property>
        </widget>
       </item>
-      <item row="16" column="0">
+      <item row="18" column="0">
        <widget class="QLabel" name="label_15">
         <property name="text">
          <string>Total Fees</string>
         </property>
        </widget>
       </item>
-      <item row="16" column="1">
+      <item row="18" column="1">
        <widget class="QLabel" name="label_fees">
         <property name="text">
          <string>0.00</string>
@@ -282,7 +253,7 @@
         </property>
        </widget>
       </item>
-      <item row="14" column="1">
+      <item row="16" column="1">
        <widget class="QLabel" name="label_gfee">
         <property name="text">
          <string>0.00</string>
@@ -292,7 +263,7 @@
         </property>
        </widget>
       </item>
-      <item row="15" column="1">
+      <item row="17" column="1">
        <widget class="QLabel" name="label_bfee">
         <property name="text">
          <string>0.00</string>
@@ -300,6 +271,146 @@
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
+       </widget>
+      </item>
+      <item row="8" column="0">
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>Belt Fee:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <widget class="QLabel" name="label_17">
+        <property name="text">
+         <string>Total Due:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="1">
+       <widget class="QPushButton" name="pushButton_clear">
+        <property name="text">
+         <string>Clear</string>
+        </property>
+        <property name="autoDefault">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="10" column="1">
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Add</string>
+        </property>
+        <property name="autoDefault">
+         <bool>true</bool>
+        </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLabel" name="label_bdue">
+        <property name="text">
+         <string>0.00</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="1">
+       <widget class="QLabel" name="label_due">
+        <property name="text">
+         <string>0.00</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="comboBoxGrade">
+        <item>
+         <property name="text">
+          <string>8</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>1</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QComboBox" name="comboBoxBeltSize">
+        <item>
+         <property name="text">
+          <string/>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>3</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>4</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>5</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>6</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>7</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>
@@ -342,7 +453,7 @@
       </column>
       <column>
        <property name="text">
-        <string>Type</string>
+        <string>Session</string>
        </property>
       </column>
       <column>
@@ -400,14 +511,17 @@
   <tabstop>inputName</tabstop>
   <tabstop>comboBoxDojo</tabstop>
   <tabstop>comboBoxType</tabstop>
-  <tabstop>inputGrade</tabstop>
-  <tabstop>inputBeltSize</tabstop>
+  <tabstop>comboBoxGrade</tabstop>
+  <tabstop>comboBoxBeltSize</tabstop>
   <tabstop>comboBoxPaid</tabstop>
   <tabstop>comboBoxBeltPaid</tabstop>
   <tabstop>pushButton</tabstop>
   <tabstop>pushButton_clear</tabstop>
-  <tabstop>tableWidget</tabstop>
+  <tabstop>pushButton_certificate</tabstop>
+  <tabstop>pushButton_report</tabstop>
+  <tabstop>pushButton_belts</tabstop>
   <tabstop>comboBoxDates</tabstop>
+  <tabstop>tableWidget</tabstop>
  </tabstops>
  <resources/>
  <connections/>

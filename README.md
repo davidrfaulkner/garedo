@@ -9,11 +9,11 @@ Fees calculated based on grade attempted.
 
 Total fees including seperate belt fee.
 
-Dojos can be loaded from external file. (coming)
+Dojos can be loaded from external file.
 
-Pricing can be loaded from external file. (coming)
+Pricing can be loaded from external file.
 
-Report exports, including a basic format for doing a certificate template mail merge. (coming)
+Report exports, including a basic format for doing a certificate template mail merge.
 
 Application should work on Windows, Mac OS X and Linux.
 
@@ -62,6 +62,7 @@ It includes the mail merge template, and text files to populate dojo list and pr
 Files in /export are files the application generates when you do exports / reports.
 You shouldnt need to browse here as the application will try launch these files for you when they are made.
 This folder will also include a temp copy of the mailmerge template, re-created each time a certificate export is done.
+
 
 Dev Files
 =========

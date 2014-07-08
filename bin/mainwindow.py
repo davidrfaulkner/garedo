@@ -66,8 +66,12 @@ class MainWindow ( QMainWindow ):
             
             #Connect Date selector to slot
             self.ui.comboBoxDates.currentIndexChanged.connect(self.change_date)
-            #Connect Date selector to slot
-            self.ui.inputGrade.textChanged.connect(self.change_grade)
+            #Connect Grade and BeltPaid selector to slot
+            self.ui.comboBoxGrade.currentIndexChanged.connect(self.change_grade)
+            self.ui.comboBoxBeltPaid.currentIndexChanged.connect(self.change_grade)
+            
+            #Force Fee Update
+            self.change_grade()
             
         except Exception as e:
             #Handle init errors, log and report to user
@@ -157,12 +161,16 @@ class MainWindow ( QMainWindow ):
         self.ui.inputName.selectAll()
         self.ui.inputName.setFocus()
         
-        self.ui.inputGrade.clear()
-        self.ui.inputBeltSize.clear()
+
+        self.ui.comboBoxGrade.setCurrentIndex(0)
+        self.ui.comboBoxBeltSize.setCurrentIndex(0)
         
         self.ui.comboBoxDojo.setCurrentIndex(0)
         self.ui.comboBoxPaid.setCurrentIndex(0)
         self.ui.comboBoxBeltPaid.setCurrentIndex(0)
+        
+        #Force Fee Update
+        self.change_grade()
         
         
     def add_update (self):
@@ -178,12 +186,12 @@ class MainWindow ( QMainWindow ):
             beltpaid = 1
         
         #exception test inputs are integers
-        grade = str(self.ui.inputGrade.text())
+        grade = str(str(self.ui.comboBoxGrade.currentText()))
         try:
             int(grade)
         except:
             grade = ''
-        belt = str(self.ui.inputBeltSize.text())
+        belt = str(str(self.ui.comboBoxBeltSize.currentText()))
         try:
             int(belt)
         except:
@@ -231,9 +239,22 @@ class MainWindow ( QMainWindow ):
         """Qt Slot for handling the date selector to view previous gradings"""
         #Update due
         try:
-            self.ui.label_due.setText("${:,.2f}".format(self.students.FEES[str(self.ui.inputGrade.text())]))
+            self.ui.label_due.setText("${:,.2f}".format(self.students.FEES[str(self.ui.comboBoxGrade.currentText())]))
         except:
             self.ui.label_due.setText("Grade ERROR")
+            
+        try:
+            fee = self.students.FEES[str(self.ui.comboBoxGrade.currentText())]
+            if self.ui.comboBoxBeltPaid.currentText() == 'Yes':
+                bfee = self.students.BELTFEE
+            else:
+                bfee = 0.00
+            self.ui.label_gdue.setText("${:,.2f}".format(fee))
+            self.ui.label_bdue.setText("${:,.2f}".format(bfee))
+            self.ui.label_due.setText("${:,.2f}".format(fee+bfee))
+        except:
+            self.ui.label_gdue.setText("Grade ERROR")
+        
     
     def select_student (self):
         #Get sql id of person we are after
@@ -243,8 +264,13 @@ class MainWindow ( QMainWindow ):
         
         #Update form inputs
         self.ui.inputName.setText(student['Name'])
-        self.ui.inputGrade.setText(str(student['Grade']))
-        self.ui.inputBeltSize.setText(str(student['Belt']))
+        #self.ui.inputGrade.setText(str(student['Grade']))
+        #self.ui.inputBeltSize.setText(str(student['Belt']))
+        
+        c = self.ui.comboBoxGrade.findText(str(student['Grade']))
+        self.ui.comboBoxGrade.setCurrentIndex(c)
+        c = self.ui.comboBoxBeltSize.findText(str(student['Belt']))
+        self.ui.comboBoxBeltSize.setCurrentIndex(c)
         
         #Update form combo boxes dojo
         c = self.ui.comboBoxDojo.findText(student['Dojo'])
@@ -264,15 +290,20 @@ class MainWindow ( QMainWindow ):
         
         if student['BeltPaid']==1:
             c = self.ui.comboBoxBeltPaid.findText('Yes')
+            bfee = self.students.BELTFEE
         else:
             c = self.ui.comboBoxBeltPaid.findText('No')
+            bfee = 0.00
         self.ui.comboBoxBeltPaid.setCurrentIndex(c)
         
         #Update due
         try:
-            self.ui.label_due.setText("${:,.2f}".format(self.students.FEES[str(student['Grade'])]))
+            fee = self.students.FEES[str(student['Grade'])]
+            self.ui.label_gdue.setText("${:,.2f}".format(fee))
+            self.ui.label_bdue.setText("${:,.2f}".format(bfee))
+            self.ui.label_due.setText("${:,.2f}".format(fee+bfee))
         except:
-            self.ui.label_due.setText("Grade ERROR")
+            self.ui.label_gdue.setText("Grade ERROR")
         
         #Update Buttons to Delete / Update
         self.ui.pushButton.setText('Update')
@@ -339,7 +370,7 @@ class MainWindow ( QMainWindow ):
             with open('export/report_belts.csv', 'wb') as csvfile:
                 w = csv.writer(csvfile, dialect='excel')
                 
-                cols = ['Size', '2', '3', '4', '5', '6', '7', 'Total']
+                cols = ['Size', '2', '3', '4', '5', '6', '7']
                 w.writerow(cols)
 
                 grademap = {8:"Yellow",7:"Orange",6:"Green",5:"Blue",4:"Red",3:"Brown",2:"Brown",1:"Brown",0:"Black"}
