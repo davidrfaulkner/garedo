@@ -1,6 +1,7 @@
 import datetime
 import sqlite3
 import logging 
+import json
 
 # Log everything, and send it to file.
 logging.basicConfig(level=logging.DEBUG, filename='guredo_debug.log')
@@ -28,7 +29,18 @@ class ClassStudents:
         self.students = []
         self.id = None
         
-        self.FEES = {-2:80,-1:80,0:80,1:55,2:55,3:55,4:55,5:45,6:45,7:45,8:45,9:45}
+        self.FEES = {}
+        self.BELTFEE = 10.00
+        
+        try:
+            with open('config.json', 'r') as jsonfile:
+                config = json.load(jsonfile)
+            self.FEES = config['FEES']
+            self.BELTFEE = config['BELTFEE']
+            self.DOJOS = config['DOJOS']
+        except:
+            logging.exception("JSON config load failed")
+            raise
 
 
     def create_tables(self):
@@ -60,7 +72,7 @@ class ClassStudents:
         try:
             form['id'] = id 
             cur = self.sql.execute\
-                ('UPDATE students SET Name=:Name, Dojo=:Dojo, Type=:Type, Grade=:Grade, Belt=:Grade, '
+                ('UPDATE students SET Name=:Name, Dojo=:Dojo, Type=:Type, Grade=:Grade, Belt=:Belt, '
                  ' Paid=:Paid, BeltPaid=:BeltPaid WHERE id = :id;',
                  form)
             #self.sql.commit()
@@ -82,12 +94,17 @@ class ClassStudents:
             logging.exception("Error")
             raise
         
-    def list_student(self, id=None, date=True ):
+    def list_student(self, id=None, date=True, type=None):
         """List students for todays grading, or return a single student by ID"""
 
         if not id:
             try:
-                if date:
+                if date and type:
+                    query = 'SELECT Name, Dojo, Type, Grade, Belt, Paid, BeltPaid, id '\
+                            'FROM students WHERE Date = ? AND type = ?;'
+                    logging.debug(type)
+                    rows = self.sql.execute(query, [self.selecteddate,type])
+                elif date:
                     query = 'SELECT Name, Dojo, Type, Grade, Belt, Paid, BeltPaid, id '\
                             'FROM students WHERE Date = ?;'
                     rows = self.sql.execute(query, [self.selecteddate,])

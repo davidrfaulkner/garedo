@@ -27,6 +27,24 @@ Instructions tested on Windows 7.
 2. Install pyqt using minimal install option (Windows use http://www.riverbankcomputing.co.uk/software/pyqt/download - under binary package section)
 3. Double click guredo.pyw icon and it should work (you have presumably copied the files somewhere)
 
+
+Config Files
+============
+
+config.json is a JSON file for config data (currently Belt Price, Grading Fees, and Dojo list)
+
+config.json.default is a backup copy of the config file, and represents a fairly empty state
+
+The config files are strictly read by the program, so have to be correct. Basic JSON rules below.
+
+    Data is represented in name/value pairs
+
+    Curly braces hold objects and each name is followed by ':'(colon), the name/value pairs are separated by , (comma). The last item does NOT have a trailing comma.
+
+    Square brackets hold arrays and values are separated by ,(comma). The last item does NOT have a trailing comma.
+
+
+
 Files
 ============
 

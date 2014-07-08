@@ -10,6 +10,7 @@ logging.basicConfig(level=logging.DEBUG, filename='guredo_debug.log')
 
 #Import my Student class, and ordinal (st, nd, rd, th) helper
 from ClassStudents import ClassStudents, ordinal
+import os, csv, shutil
 
 class MainWindow ( QMainWindow ):
     """MainWindow inherits QMainWindow"""
@@ -27,6 +28,12 @@ class MainWindow ( QMainWindow ):
         
         #Connect Export Certificate
         self.ui.pushButton_certificate.clicked.connect(self.export_certificate)
+        
+        #Connect Export Report
+        self.ui.pushButton_report.clicked.connect(self.export_report)
+        
+        #Connect Export Belts
+        self.ui.pushButton_belts.clicked.connect(self.export_belts)
         
         
         #Remove edit function from table until I go pro
@@ -47,7 +54,7 @@ class MainWindow ( QMainWindow ):
             self.refresh_table()
             
             #Fake a dojo list
-            dojos = ['Birkdale', 'Manuka', 'Flanshaw']
+            dojos = self.students.DOJOS
             for dojo in dojos:
                 self.ui.comboBoxDojo.addItem(dojo)
             
@@ -91,7 +98,7 @@ class MainWindow ( QMainWindow ):
                     if key == 'Grade':
                         try:
                             if row['Paid'] == 1:
-                                gfee += self.students.FEES[value]
+                                gfee += self.students.FEES[str(value)]
                             
                             if value == 0:
                                 value = 'Shodan Ho'
@@ -122,7 +129,7 @@ class MainWindow ( QMainWindow ):
                         if value == 1:
                             value = 'Yes'
                             if key == 'BeltPaid':
-                                bfee += 10.00
+                                bfee += self.students.BELTFEE
                         elif value == 3:
                             value = 'Reattempt'
                         else:
@@ -224,7 +231,7 @@ class MainWindow ( QMainWindow ):
         """Qt Slot for handling the date selector to view previous gradings"""
         #Update due
         try:
-            self.ui.label_due.setText("${:,.2f}".format(self.students.FEES[int(self.ui.inputGrade.text())]))
+            self.ui.label_due.setText("${:,.2f}".format(self.students.FEES[str(self.ui.inputGrade.text())]))
         except:
             self.ui.label_due.setText("Grade ERROR")
     
@@ -263,7 +270,7 @@ class MainWindow ( QMainWindow ):
         
         #Update due
         try:
-            self.ui.label_due.setText("${:,.2f}".format(self.students.FEES[student['Grade']]))
+            self.ui.label_due.setText("${:,.2f}".format(self.students.FEES[str(student['Grade'])]))
         except:
             self.ui.label_due.setText("Grade ERROR")
         
@@ -274,5 +281,105 @@ class MainWindow ( QMainWindow ):
     def export_certificate(self):
         """Logic to ui select student type, generate csv of result, and copy/launch mailmerge template"""
         type, ok = QInputDialog.getItem(self, "Export which entries", "Type:", ['Adult','Child'], 0, False)
+        if ok:
+            list = self.students.list_student(type=str(type))
+            with open('export/certificate_export.csv', 'wb') as csvfile:
+                w = csv.writer(csvfile, dialect='excel')
+                w.writerow(['Name','Grade','+'])
+                for student in list:
+                    w.writerow([student['Name'],student['grade'],str(ordinal(student['grade'])).replace(str(student['grade']),'')])
+            shutil.copy('template/template.docx', 'export/template.docx')
+            try:
+                os.startfile('export/template.docx', 'open')
+            except:
+                #This will make the above windows command work on linux for dev testing
+                import webbrowser
+                webbrowser.open('export/template.docx')
         
+    def export_report(self):
+            students = self.students.list_student()
+            with open('export/report_export.csv', 'wb') as csvfile:
+                w = csv.writer(csvfile, dialect='excel')
+                w.writerow(['Name', 'Dojo', 'Type', 'Grade', 'Belt', 'Paid', 'BeltPaid', 'ID', 'GradeFull','Fee', 'BeltFee', 'TotalFee'])
+                for student in students:
+                    row = list(student)
+                    
+                    try:
+                        if student['Paid'] == 1:
+                            fee = self.students.FEES[str(student['Grade'])]
+                        else:
+                            fee = 0
+                    except:
+                        fee = 0
+                    
+                    try:
+                        if student['BeltPaid'] == 1:
+                            bfee = self.students.BELTFEE
+                        else:
+                            bfee = 0
+                    except:
+                        bfee = 0 
+                    
+                    row.append(str(ordinal(student['Grade'])+' Kyu'))
+                    row.append(fee)
+                    row.append(bfee)
+                    row.append(fee+bfee)
+                    
+                    
+                    w.writerow(row)
+            try:
+                os.startfile('export/report_export.csv', 'open')
+            except:
+                #This will make the above windows command work on linux for dev testing
+                import webbrowser
+                webbrowser.open('export/report_export.csv')
+    
+    def export_belts(self):
+            students = self.students.list_student()
+            with open('export/report_belts.csv', 'wb') as csvfile:
+                w = csv.writer(csvfile, dialect='excel')
+                
+                cols = ['Size', '2', '3', '4', '5', '6', '7', 'Total']
+                w.writerow(cols)
+
+                grademap = {8:"Yellow",7:"Orange",6:"Green",5:"Blue",4:"Red",3:"Brown",2:"Brown",1:"Brown",0:"Black"}
+                belts = {"Yellow":{},"Orange":{},"Green":{},"Blue":{},"Red":{},"Brown":{},"Black":{}}
+                order = ["Yellow","Orange","Green","Blue","Red","Brown","Black"]
+                
+                
+                for student in students:
+                    if student['BeltPaid']:
+                        try:
+                            colour = grademap[student['Grade']]
+                            if belts[colour].has_key(student['Belt']):
+                                belts[colour][student['Belt']] += 1
+                            else:
+                                belts[colour][student['Belt']] = 1
+                        except KeyError:
+                            logging.exception("Student with unsupported grade")
+                
+                
+                for colour in order:
+                    logging.debug(belts[colour])
+                    row = []
+                    for col in cols:
+                        if col == "Size":
+                            row.append(colour)
+                        elif col == "Total":
+                            row.append('')
+                        else:
+                            try:
+                                row.append(belts[colour][int(col)])
+                            except:
+                                row.append(0)
+                            
+                    w.writerow(row)
+                
+            try:
+                os.startfile('export/report_belts.csv', 'open')
+            except:
+                #This will make the above windows command work on linux for dev testing
+                import webbrowser
+                webbrowser.open('export/report_belts.csv')
+            
 
