@@ -290,7 +290,7 @@ class MainWindow ( QMainWindow ):
                     w.writerow([student['Name'],student['grade'],str(ordinal(student['grade'])).replace(str(student['grade']),'')])
             shutil.copy('template/template.docx', 'export/template.docx')
             try:
-                os.startfile('export/template.docx', 'open')
+                os.startfile('export\\template.docx', 'open')
             except:
                 #This will make the above windows command work on linux for dev testing
                 import webbrowser
@@ -328,7 +328,7 @@ class MainWindow ( QMainWindow ):
                     
                     w.writerow(row)
             try:
-                os.startfile('export/report_export.csv', 'open')
+                os.startfile('export\\report_export.csv', 'open')
             except:
                 #This will make the above windows command work on linux for dev testing
                 import webbrowser
@@ -360,7 +360,6 @@ class MainWindow ( QMainWindow ):
                 
                 
                 for colour in order:
-                    logging.debug(belts[colour])
                     row = []
                     for col in cols:
                         if col == "Size":
@@ -370,13 +369,13 @@ class MainWindow ( QMainWindow ):
                         else:
                             try:
                                 row.append(belts[colour][int(col)])
-                            except:
+                            except KeyError:
                                 row.append(0)
                             
                     w.writerow(row)
                 
             try:
-                os.startfile('export/report_belts.csv', 'open')
+                os.startfile('export\\report_belts.csv', 'open')
             except:
                 #This will make the above windows command work on linux for dev testing
                 import webbrowser
