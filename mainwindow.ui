@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>963</width>
-    <height>602</height>
+    <width>1000</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -302,11 +302,14 @@
         <property name="text">
          <string>Add</string>
         </property>
+        <property name="shortcut">
+         <string>Enter</string>
+        </property>
         <property name="autoDefault">
          <bool>true</bool>
         </property>
         <property name="default">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -504,6 +507,13 @@
       </property>
      </widget>
     </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="pushButton_equipment">
+      <property name="text">
+       <string>Equipment</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>
@@ -517,6 +527,7 @@
   <tabstop>comboBoxBeltPaid</tabstop>
   <tabstop>pushButton</tabstop>
   <tabstop>pushButton_clear</tabstop>
+  <tabstop>pushButton_equipment</tabstop>
   <tabstop>pushButton_certificate</tabstop>
   <tabstop>pushButton_report</tabstop>
   <tabstop>pushButton_belts</tabstop>

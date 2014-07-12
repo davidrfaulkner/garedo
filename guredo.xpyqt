@@ -22,10 +22,12 @@
     </variable>
     <variable name="FORMS">
         <file>mainwindow.ui</file>
+        <file>equipwindow.ui</file>
     </variable>
     <variable name="PYTHON_FILES">
         <file>guredo.pyw</file>
         <file>bin/ClassStudents.py</file>
         <file>bin/mainwindow.py</file>
+        <file>bin/EquipmentWindow.py</file>
     </variable>
 </project>

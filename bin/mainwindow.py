@@ -2,7 +2,10 @@ from PyQt4 import uic
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
-( Ui_MainWindow, QMainWindow ) = uic.loadUiType( 'mainwindow.ui' )
+( Ui_MainWindow, QMainWindow) = uic.loadUiType( 'mainwindow.ui' )
+
+#Import Equipment Window (before logging so we dont log for Qt)
+from bin.EquipmentWindow import EquipmentWindow 
 
 # Log everything, and send it to file.
 import logging 
@@ -11,6 +14,9 @@ logging.basicConfig(level=logging.DEBUG, filename='guredo_debug.log')
 #Import my Student class, and ordinal (st, nd, rd, th) helper
 from ClassStudents import ClassStudents, ordinal
 import os, csv, shutil
+
+from datetime import datetime
+
 
 class MainWindow ( QMainWindow ):
     """MainWindow inherits QMainWindow"""
@@ -34,6 +40,8 @@ class MainWindow ( QMainWindow ):
         
         #Connect Export Belts
         self.ui.pushButton_belts.clicked.connect(self.export_belts)
+        
+        
         
         
         #Remove edit function from table until I go pro
@@ -73,12 +81,26 @@ class MainWindow ( QMainWindow ):
             #Force Fee Update
             self.change_grade()
             
+            #Temp code to open second window
+            self.EquipmentWindow = EquipmentWindow()
+            #Connect Equipment to new window
+            self.ui.pushButton_equipment.clicked.connect(self.EquipmentWindow.open)
+            #dialog.ui = EquipmentWindow()
+            #dialog.ui.setupUi(dialog)
+            #dialog.setAttribute(WA_DeleteOnClose)
+            #dialog.open()
+            
         except Exception as e:
             #Handle init errors, log and report to user
             errorDialog = QErrorMessage(self)
             errorDialog.showMessage("App Init Error: "+ str(e))
             logging.exception("App Init Error: ")
-
+    
+    def keyPressEvent(self, event):
+        key = event.key()
+        if key == Qt.Key_Return or  key == Qt.Key_Enter: 
+            self.add_update()
+        
     def __del__ ( self ):
         self.ui = None
     
@@ -331,7 +353,8 @@ class MainWindow ( QMainWindow ):
             students = self.students.list_student()
             with open('export/report_export.csv', 'wb') as csvfile:
                 w = csv.writer(csvfile, dialect='excel')
-                w.writerow(['Name', 'Dojo', 'Type', 'Grade', 'Belt', 'Paid', 'BeltPaid', 'ID', 'GradeFull','Fee', 'BeltFee', 'TotalFee'])
+                #w.writerow(['Name', 'Dojo', 'Type', 'Grade', 'Belt', 'Paid', 'BeltPaid', 'ID', 'GradeFull','Fee', 'BeltFee', 'TotalFee'])
+                w.writerow(['Date','Name', 'Grade Full','Fee','Dojo', 'Type', 'Grade', 'Belt', 'Paid', 'BeltPaid', 'ID', 'BeltFee', 'TotalFee'])
                 for student in students:
                     row = list(student)
                     
@@ -350,9 +373,10 @@ class MainWindow ( QMainWindow ):
                             bfee = 0
                     except:
                         bfee = 0 
-                    
-                    row.append(str(ordinal(student['Grade'])+' Kyu'))
-                    row.append(fee)
+                    date = datetime.strptime(self.students.selecteddate, '%Y-%m-%d')
+                    row.insert(0,date.strftime('%d-%m-%Y'))
+                    row.insert(2,str(ordinal(student['Grade'])+' Kyu'))
+                    row.insert(3, fee)
                     row.append(bfee)
                     row.append(fee+bfee)
                     
